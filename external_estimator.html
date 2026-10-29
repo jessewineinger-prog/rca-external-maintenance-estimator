@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Maintenance Vendor Markup & Proposal Estimator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 antialiased p-3 sm:p-6 lg:p-8">
+
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- Top Header & Property Management Toolbar -->
+    <header class="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-5 sm:p-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">PM Contractor Suite</span>
+            <span id="locationCountyBadge" class="text-xs text-slate-400 font-medium">Indianapolis (Marion County)</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1 tracking-tight">Maintenance (External Vendor) Markup & Proposal Estimator</h1>
+          <p class="text-sm text-slate-500 mt-0.5">Subcontractor invoice markup engine, trade benchmark verification, and audit-proof owner proposals</p>
+        </div>
+
+        <!-- Location & Tax Selector -->
+        <div class="flex flex-wrap items-end gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">Property Address</label>
+            <input type="text" id="propAddressInput" placeholder="e.g. 1420 E Washington St" class="w-48 px-2 py-1 text-sm font-semibold rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">City</label>
+            <input type="text" id="cityInput" value="Indianapolis" class="w-28 px-2 py-1 text-sm font-semibold rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">State</label>
+            <input type="text" id="stateInput" value="IN" maxlength="2" class="w-12 px-2 py-1 text-sm font-semibold uppercase text-center rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">Zip Code</label>
+            <input type="text" id="zipCodeInput" value="46203" class="w-20 px-2 py-1 text-sm font-semibold rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">Task #</label>
+            <input type="text" id="taskNumberInput" placeholder="e.g. 10592" class="w-20 px-2 py-1 text-sm font-semibold rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold uppercase text-slate-400">Tax on Materials (%)</label>
+            <input type="number" id="taxRateInput" value="7.0" step="0.1" class="w-16 px-2 py-1 text-sm font-semibold rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden bg-white text-slate-900">
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btn_update_location" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center gap-1 cursor-pointer">
+              <span>↻ Update</span>
+            </button>
+            <span class="inline-flex items-center text-xs font-medium text-indigo-700 bg-indigo-50 px-2.5 py-1.5 rounded-lg border border-indigo-200/80">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-1.5"></span> IN 7% Standard
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN TWO-COLUMN WORKSPACE -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT COLUMN: VENDOR, TRADE CLASSIFICATION & INVOICE DETAILS (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- 1. VENDOR SELECTION & INVOICE DETAILS (MOVED TO TOP) -->
+        <section class="bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-white rounded-2xl shadow-xs border-2 border-indigo-500/80 p-5 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-indigo-200/80">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-indigo-950 flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+              1. Outside Vendor Information
+            </h2>
+            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-600 text-white">YOUR ACTUAL COST</span>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label for="vendorSelectDropdown" class="block text-xs font-semibold text-indigo-950">Select Subcontractor / Vendor</label>
+                <span class="text-[10px] text-indigo-600 font-semibold" id="vendorProfileBadge">Trade Pre-Filtered</span>
+              </div>
+              <select id="vendorSelectDropdown" class="w-full px-3 py-2 text-xs font-bold rounded-xl border border-indigo-300 bg-white text-slate-900 focus:ring-2 focus:ring-indigo-600 focus:outline-hidden cursor-pointer shadow-xs">
+                <!-- Populated dynamically via JavaScript with vendor roster -->
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="vendorCustomInputsWrapper">
+              <div>
+                <label class="block text-[11px] font-semibold text-indigo-950 mb-1">Vendor Name</label>
+                <input type="text" id="vendorNameInput" placeholder="e.g. Apex Mechanical LLC" class="w-full px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-indigo-300 bg-white text-slate-900 focus:ring-2 focus:ring-indigo-600 focus:outline-hidden">
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-indigo-950 mb-1">Vendor Estimate / Quote #</label>
+                <input type="text" id="vendorInvoiceNumInput" placeholder="e.g. EST-8841" class="w-full px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-indigo-300 bg-white text-slate-900 focus:ring-2 focus:ring-indigo-600 focus:outline-hidden">
+              </div>
+            </div>
+
+            <!-- Single Vendor Quoted Amount Input -->
+            <div class="pt-1 border-t border-indigo-100">
+              <div class="p-3 rounded-xl bg-white border-2 border-indigo-300 shadow-xs space-y-1">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label for="cost_quoted_vendor" class="text-xs font-bold text-indigo-950 block">Vendor Quoted Amount ($)</label>
+                    <span class="text-[10px] text-slate-500">Total invoice, bid, or estimate provided by subcontractor</span>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute left-2.5 top-1.5 text-indigo-700 font-bold text-sm">$</span>
+                    <input type="number" id="cost_quoted_vendor" placeholder="0" step="1" class="w-32 pl-6 pr-2.5 py-1 text-base font-extrabold text-right rounded-lg border border-indigo-300 bg-indigo-50/40 text-indigo-950 focus:ring-2 focus:ring-indigo-600 focus:outline-hidden">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Vendor Cost Readout -->
+            <div class="p-3 bg-white/95 rounded-xl border border-indigo-300 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-700">Vendor Cost Basis:</span>
+              <span class="text-base font-extrabold text-indigo-950" id="vendorTotalCostBasisDisplay">$0.00</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. TRADE / WORK TYPE SELECTION (DRIVEN BY VENDOR) -->
+        <section class="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-5 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+              2. Work Classification & Trade Category
+            </h2>
+            <span class="text-xs text-slate-400 font-medium" id="tradeCountLabel">Filtered by vendor</span>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed" id="vendorTradeInstruction">
+            Classifications below are filtered based on your selected vendor. The vendor-specific markup rate is auto-applied to guarantee profit goals.
+          </p>
+
+          <div class="grid grid-cols-2 gap-2" id="tradeSelectorContainer">
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="plumbing" data-default-markup="20" data-retail-mult="1.28">
+              <span class="font-bold text-xs block text-slate-900">🚰 Plumbing</span>
+              <span class="text-[10px] text-slate-500">Pipes, Drains, Water Heaters</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="electrical" data-default-markup="20" data-retail-mult="1.30">
+              <span class="font-bold text-xs block text-slate-900">⚡ Electrical</span>
+              <span class="text-[10px] text-slate-500">Panels, Wiring, Fixtures</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="hvac" data-default-markup="20" data-retail-mult="1.32">
+              <span class="font-bold text-xs block text-slate-900">❄️ HVAC</span>
+              <span class="text-[10px] text-slate-500">Furnace, AC, Condensers</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="roofing_construction" data-default-markup="20" data-retail-mult="1.26">
+              <span class="font-bold text-xs block text-slate-900">🏡 Roofing / Construction</span>
+              <span class="text-[10px] text-slate-500">Roof, Gutters, Siding, Structural</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="tree" data-default-markup="20" data-retail-mult="1.28">
+              <span class="font-bold text-xs block text-slate-900">🌳 Tree Services</span>
+              <span class="text-[10px] text-slate-500">Trimming, Removal, Stumps, Overgrowth</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="turnover" data-default-markup="20" data-retail-mult="1.24">
+              <span class="font-bold text-xs block text-slate-900">🏠 Turnover</span>
+              <span class="text-[10px] text-slate-500">Punch-List, Rent-Ready Rehab & Prep</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="cleaning" data-default-markup="20" data-retail-mult="1.22">
+              <span class="font-bold text-xs block text-slate-900">🧹 Cleaning Services</span>
+              <span class="text-[10px] text-slate-500">Turnover Clean, Touch-Ups, Sanitization</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="drywall" data-default-markup="20" data-retail-mult="1.22">
+              <span class="font-bold text-xs block text-slate-900">🎨 Drywall / Painting</span>
+              <span class="text-[10px] text-slate-500">Patches, Texture, Full Paint</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="flooring" data-default-markup="20" data-retail-mult="1.25">
+              <span class="font-bold text-xs block text-slate-900">🪵 Flooring</span>
+              <span class="text-[10px] text-slate-500">LVP, Carpet, Tile, Transitions</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="general" data-default-markup="20" data-retail-mult="1.20">
+              <span class="font-bold text-xs block text-slate-900">🔨 General</span>
+              <span class="text-[10px] text-slate-500">Doors, Locks, Handyman, Repairs</span>
+            </button>
+            <button type="button" class="btn-trade p-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-left transition-all cursor-pointer" data-trade="appliance" data-default-markup="20" data-retail-mult="1.25">
+              <span class="font-bold text-xs block text-slate-900">⚙️ Used Appliance & Repair</span>
+              <span class="text-[10px] text-slate-500">Diagnostics, Parts, Used Units</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3. WORK QUANTIFICATION & SPECIFIC TASKS (DRIVES MARKET BENCHMARK) -->
+        <section class="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-5 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+              3. Scope Quantification & Tasks
+            </h2>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200" id="quantBenchmarkBadge">Benchmark: $0</span>
+              <button type="button" id="btn_clear_tasks" class="text-[10px] text-slate-400 hover:text-slate-600 font-semibold underline cursor-pointer">Reset</button>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Select a high-level service category below to reveal specific repair or replacement items. Sub-options calculate your <strong>Regional Market Baseline</strong> and construct your owner quote.
+          </p>
+
+          <div id="quantTaskListContainer" class="space-y-3 max-h-[380px] overflow-y-auto pr-1">
+            <!-- Populated dynamically based on selectedTrade with accordion/hierarchical sub-groups -->
+          </div>
+
+          <!-- Custom Scope Note (Appends to Owner Proposal) -->
+          <div class="pt-2 border-t border-slate-100">
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Additional Specifics / Problem Notes</label>
+            <textarea id="scopeDescriptionInput" rows="2" placeholder="e.g. Unit #204, tenant reported water pooling under kitchen sink. Repaired emergency shut-off." class="w-full p-2.5 text-xs font-medium rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden text-slate-800 bg-slate-50"></textarea>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN: CLIENT BILLABLE ENGINE, BENCHMARK MATRIX & PROPOSAL (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- CLIENT BILLABLE QUOTE ENGINE CARD -->
+        <div class="bg-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-lg border border-slate-800 space-y-5">
+
+          <!-- Top Row: Title & Strategy Pill -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400">Owner Billing Strategy</span>
+              <h2 class="text-lg font-bold text-white tracking-tight">Client Billable Quote Engine</h2>
+            </div>
+            <span class="inline-flex items-center text-xs font-bold text-indigo-300 bg-indigo-950/80 px-2.5 py-1 rounded-full border border-indigo-800" id="tradeBadgeDisplay">
+              Plumbing | 20% Target
+            </span>
+          </div>
+
+          <!-- Market-Anchored Strategy Selector (NEW) -->
+          <div class="bg-slate-800/90 p-3.5 rounded-xl border border-indigo-500/40 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1.5">
+                <span>🎯</span> Pricing Optimization Strategy
+              </span>
+              <span class="text-[11px] font-semibold text-emerald-400" id="strategyBadge">Balanced Value & Profit</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button type="button" class="btn-strategy p-2 rounded-lg border border-slate-600 hover:border-slate-500 bg-slate-900 text-left transition-all cursor-pointer" data-strategy="cost_plus">
+                <span class="block text-xs font-bold text-slate-200">Cost-Plus Floor</span>
+                <span class="block text-[10px] text-slate-400">Strict Markup on Cost</span>
+              </button>
+              <button type="button" class="btn-strategy p-2 rounded-lg border border-slate-600 hover:border-slate-500 bg-slate-900 text-left transition-all cursor-pointer" data-strategy="max_value">
+                <span class="block text-xs font-bold text-emerald-400">Max Client Value</span>
+                <span class="block text-[10px] text-slate-400">12% Under Market</span>
+              </button>
+              <button type="button" class="btn-strategy p-2 rounded-lg border-2 border-indigo-500 bg-indigo-950/60 text-left transition-all cursor-pointer" data-strategy="balanced">
+                <span class="block text-xs font-bold text-indigo-300">Sweet Spot</span>
+                <span class="block text-[10px] text-slate-400">Split Market Spread</span>
+              </button>
+              <button type="button" class="btn-strategy p-2 rounded-lg border border-slate-600 hover:border-slate-500 bg-slate-900 text-left transition-all cursor-pointer" data-strategy="max_profit">
+                <span class="block text-xs font-bold text-amber-400">Max Profit</span>
+                <span class="block text-[10px] text-slate-400">Market Baseline Limit</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls: Markup Percentage & Administration Service Fee -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <!-- Target Markup % (Vendor Floor Baseline) -->
+            <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+              <div class="flex items-center justify-between mb-2">
+                <label for="customMarkupInput" class="text-xs font-semibold text-slate-300">Minimum Markup Floor</label>
+                <span class="text-xs text-indigo-400 font-bold" id="targetMarkupDisplay">20.0%</span>
+              </div>
+              <div class="grid grid-cols-6 gap-1 items-center">
+                <button type="button" class="btn-markup py-1 text-[11px] font-bold rounded-lg border border-slate-600 hover:bg-slate-700 text-slate-200 cursor-pointer text-center" data-val="10">10%</button>
+                <button type="button" class="btn-markup py-1 text-[11px] font-bold rounded-lg border border-slate-600 hover:bg-slate-700 text-slate-200 cursor-pointer text-center" data-val="15">15%</button>
+                <button type="button" class="btn-markup py-1 text-[11px] font-bold rounded-lg border border-indigo-500 bg-indigo-500/20 text-indigo-300 cursor-pointer text-center" data-val="20">20%</button>
+                <button type="button" class="btn-markup py-1 text-[11px] font-bold rounded-lg border border-slate-600 hover:bg-slate-700 text-slate-200 cursor-pointer text-center" data-val="25">25%</button>
+                <button type="button" class="btn-markup py-1 text-[11px] font-bold rounded-lg border border-slate-600 hover:bg-slate-700 text-slate-200 cursor-pointer text-center" data-val="30">30%</button>
+                <input type="number" id="customMarkupInput" value="20" step="0.5" placeholder="%" class="w-full py-1 text-[11px] font-bold text-center rounded-lg bg-slate-900 border border-slate-600 text-white focus:outline-hidden focus:border-indigo-500">
+              </div>
+            </div>
+
+            <!-- Coordination / Admin Fee & Rounding -->
+            <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700 space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-semibold text-slate-300 flex items-center gap-2 cursor-pointer select-none">
+                  <input type="checkbox" id="includeServiceFee" checked class="w-4 h-4 text-indigo-500 rounded border-slate-600 bg-slate-900 focus:ring-indigo-500">
+                  Admin Service Fee
+                </label>
+                <div class="flex items-center gap-1">
+                  <span class="text-xs text-slate-400">$</span>
+                  <input type="number" id="serviceFeeAmount" value="25.00" step="5" class="w-14 px-1.5 py-0.5 text-xs font-bold text-right rounded-lg bg-slate-900 border border-slate-600 text-white focus:outline-hidden">
+                </div>
+              </div>
+
+              <!-- Fee Timing Relative to Factor of 11 -->
+              <div class="text-[11px] text-slate-400 flex items-center gap-3 pt-1 border-t border-slate-700/80">
+                <label class="flex items-center gap-1 cursor-pointer select-none">
+                  <input type="radio" name="feeTiming" value="before" checked class="text-indigo-500 text-xs">
+                  Included in factor-11
+                </label>
+                <label class="flex items-center gap-1 cursor-pointer select-none">
+                  <input type="radio" name="feeTiming" value="after" class="text-indigo-500 text-xs">
+                  Fee added after
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CLIENT PROPOSAL HERO AMOUNT -->
+          <div class="bg-gradient-to-r from-indigo-950/70 via-slate-800 to-slate-900 rounded-xl p-5 border border-indigo-500/40 relative">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider block">Recommended Client Proposal Total</span>
+                </div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-1" id="clientProposalTotal">$0.00</div>
+                <div class="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-indigo-300/90 font-mono" id="factor11FormulaPreview">
+                  Divisible by 11: $0 ÷ 11 = 0 exact
+                </div>
+              </div>
+
+              <div class="text-right sm:border-l sm:border-slate-700 sm:pl-5">
+                <span class="text-xs text-slate-400 block font-medium">Net PM Spread / Profit</span>
+                <div class="text-2xl font-bold text-emerald-400 tracking-tight" id="clientNetProfitDisplay">$0.00</div>
+                <span class="text-xs text-emerald-300 font-semibold" id="clientMarginPctDisplay">0.0% Realized Spread</span>
+              </div>
+            </div>
+
+            <!-- Live Audit & Value Metrics Row -->
+            <div class="mt-4 pt-3 border-t border-slate-700/80 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block" id="benchmarkSourceLabel">Market Baseline</span>
+                <span class="font-bold text-slate-200" id="marketBenchmarkDisplay">$0.00</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Quoted Subcontractor</span>
+                <span class="font-bold text-indigo-400" id="clientBasisDisplay">$0.00</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Client Savings</span>
+                <span class="font-bold text-emerald-400" id="clientSavingsDisplay">$0.00</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Client Savings %</span>
+                <span class="font-bold text-emerald-300" id="clientSavingsPctDisplay">0.0% Off Retail</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copy Quote Action Button -->
+          <div class="flex items-center gap-3">
+            <button type="button" id="btn_copy_quote_owner" class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-sm transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer">
+              <span>📋 Copy Formatted Proposal for Owner</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- 3-WAY COMPARATIVE BENCHMARK MATRIX -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+          <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Cost, Benchmark & Billing Comparison</h3>
+              <p class="text-xs text-slate-500">Subcontractor cost vs. Regional Retail Standard vs. Your Marked-Up Proposal</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="copySummaryBtn" class="px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                <span>📋 Copy Audit Summary</span>
+              </button>
+              <button onclick="window.print()" class="px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                <span>🖨️ Print</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 bg-slate-100/60 font-semibold text-slate-600">
+                  <th class="py-3 px-3">Expense Category</th>
+                  <th class="py-3 px-3 text-right text-indigo-900 bg-indigo-50/50">Subcontractor Net</th>
+                  <th class="py-3 px-3 text-right text-slate-700">Market Baseline</th>
+                  <th class="py-3 px-3 text-right text-emerald-800 font-bold bg-emerald-50/40">Client Proposed</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700 font-normal">
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                  <td class="py-2.5 px-3">
+                    <span class="font-semibold text-slate-900 block">Trade Service & Execution</span>
+                    <span class="text-[10px] text-slate-400" id="tableTradeLabel">Plumbing</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-right font-medium text-indigo-950 bg-indigo-50/30" id="row_labor_sub">$0.00</td>
+                  <td class="py-2.5 px-3 text-right font-medium" id="row_labor_market">$0.00</td>
+                  <td class="py-2.5 px-3 text-right font-medium text-emerald-900 bg-emerald-50/20" id="row_labor_client">$0.00</td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                  <td class="py-2.5 px-3">
+                    <span class="font-semibold text-slate-900 block">Admin Service Fee</span>
+                    <span class="text-[10px] text-slate-400">Vendor dispatch & project management</span>
+                  </td>
+                  <td class="py-2.5 px-3 text-right text-indigo-950 bg-indigo-50/30">$0.00</td>
+                  <td class="py-2.5 px-3 text-right">$0.00</td>
+                  <td class="py-2.5 px-3 text-right text-emerald-900 bg-emerald-50/20" id="row_fee_client">$0.00</td>
+                </tr>
+
+                <!-- TOTAL ROW -->
+                <tr class="bg-slate-50 font-bold text-slate-900 text-xs sm:text-sm border-t-2 border-slate-300">
+                  <td class="py-3 px-3">
+                    <span>Turnkey Total</span>
+                  </td>
+                  <td class="py-3 px-3 text-right text-indigo-950 bg-indigo-100/40" id="row_total_sub">$0.00</td>
+                  <td class="py-3 px-3 text-right text-slate-700" id="row_total_market">$0.00</td>
+                  <td class="py-3 px-3 text-right text-emerald-800 bg-emerald-100/40" id="row_total_client">$0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Explanatory Note -->
+          <div class="p-4 bg-slate-50/80 border-t border-slate-200 text-xs text-slate-600 space-y-1.5">
+            <h4 class="font-bold text-slate-700">Contractor Pricing Strategy:</h4>
+            <p class="text-[11px] leading-relaxed">
+              Your trade markup is calculated on true vendor cost, then bundled with optional project oversight fees and calibrated to exact divisible-by-11 pricing. This guarantees your fee remains defensible against average regional trade rates while securing target contractor margins.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs font-semibold transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2 z-50">
+    <span class="text-indigo-400">✓</span>
+    <span id="toastMsg">Copied to clipboard!</span>
+  </div>
+
+  <script>
+    // --- STATE VARIABLES ---
+    let selectedVendorId = ''; // Blank by default
+    let selectedTrade = 'plumbing';
+    let targetMarkupPct = 20.0;
+    let retailMultiplier = 1.28;
+    let activeTaskSelections = {}; // Maps taskId -> { qty: number, rate: number, name: string, unit: string, subtotal: number }
+    let expandedCategories = {}; // Default ALL categories to collapsed
+    let currentPricingStrategy = 'balanced'; // 'cost_plus', 'max_value', 'balanced', 'max_profit'
+
+    // --- COMPLETE SUBCONTRACTOR DATABASE ---
+    const vendorDatabase = {
+      'abary': {
+        name: 'A Bary Comfortable Climate',
+        trades: ['hvac'],
+        defaultTrade: 'hvac',
+        markup: 20.0,
+        retailMult: 1.32,
+        notes: 'HVAC specialist: heating, cooling, diagnostics & system installations.'
+      },
+      'american_earthworks': {
+        name: 'American Earthworks',
+        trades: ['plumbing'],
+        defaultTrade: 'plumbing',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Plumbing installations, fixture overhauls & excavation.'
+      },
+      'ars': {
+        name: 'ARS',
+        trades: ['plumbing', 'hvac'],
+        defaultTrade: 'plumbing',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Plumbing drain cabling, toilet augering, sewer lines & HVAC systems.'
+      },
+      'artisan': {
+        name: 'Artisan Plumbing',
+        trades: ['plumbing'],
+        defaultTrade: 'plumbing',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Residential rough-ins, finish plumbing, toilet pull & resets.'
+      },
+      'cs_ideal': {
+        name: 'C&S Ideal Renovations',
+        trades: ['general', 'turnover', 'drywall', 'flooring'],
+        defaultTrade: 'general',
+        markup: 20.0,
+        retailMult: 1.22,
+        notes: 'General renovations, drywall repair & paint, flooring & unit turnovers.'
+      },
+      'daves_tree': {
+        name: "Dave's Tree & Lawn",
+        trades: ['tree'],
+        defaultTrade: 'tree',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Tree trimming, hazardous removal, stump grinding & grounds clearance.'
+      },
+      'erik_nelson': {
+        name: 'Erik Nelson',
+        trades: ['hvac', 'plumbing'],
+        defaultTrade: 'hvac',
+        markup: 20.0,
+        retailMult: 1.30,
+        notes: 'HVAC repair & replacements, plumbing repairs.'
+      },
+      'gg_construction': {
+        name: 'G&G Construction',
+        trades: ['roofing_construction'],
+        defaultTrade: 'roofing_construction',
+        markup: 20.0,
+        retailMult: 1.26,
+        notes: 'Roof repairs, chimney flashing, gutters, siding & structural repairs.'
+      },
+      'gurney_bush': {
+        name: 'Gurney Bush',
+        trades: ['plumbing'],
+        defaultTrade: 'plumbing',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Mechanical drain cabling, basement traps & heavy cleanouts.'
+      },
+      'indy_voltage': {
+        name: 'Indy Voltage',
+        trades: ['electrical'],
+        defaultTrade: 'electrical',
+        markup: 20.0,
+        retailMult: 1.30,
+        notes: 'Electrical service calls, panel upgrades, detached garage wiring & diagnostics.'
+      },
+      'jaime_home': {
+        name: 'Jaime Home Improvement LLC',
+        trades: ['roofing_construction'],
+        defaultTrade: 'roofing_construction',
+        markup: 20.0,
+        retailMult: 1.24,
+        notes: 'Exterior building repairs, roofing, trim & weatherproofing.'
+      },
+      'macs_plumbing': {
+        name: "Mac's Plumbing & Drains",
+        trades: ['plumbing'],
+        defaultTrade: 'plumbing',
+        markup: 20.0,
+        retailMult: 1.28,
+        notes: 'Water supply lines, outside spigots, boiler drains & line capping.'
+      },
+      'matthews_appliance': {
+        name: 'Matthews Appliance',
+        trades: ['appliance'],
+        defaultTrade: 'appliance',
+        markup: 20.0,
+        retailMult: 1.25,
+        notes: 'Appliance diagnostics, part replacements & mechanical servicing.'
+      },
+      'michelle_cornelison': {
+        name: 'Michelle Cornelison',
+        trades: ['cleaning'],
+        defaultTrade: 'cleaning',
+        markup: 20.0,
+        retailMult: 1.22,
+        notes: 'Turnover deep cleans, touch-up cleans & property sanitization.'
+      },
+      'molina': {
+        name: 'Molina Used Appliances',
+        trades: ['appliance'],
+        defaultTrade: 'appliance',
+        markup: 20.0,
+        retailMult: 1.25,
+        notes: 'Refurbished appliance units, washer/dryer repairs & pump replacements.'
+      },
+      'on_a_budget': {
+        name: 'On A Budget (Kelly Beck)',
+        trades: ['general', 'turnover', 'drywall', 'flooring'],
+        defaultTrade: 'general',
+        markup: 20.0,
+        retailMult: 1.22,
+        notes: 'Handyman repairs, banister fixes, tree limb trimming, siding, punch-lists.'
+      },
+      'turner_appliance': {
+        name: 'Turner Appliance',
+        trades: ['appliance'],
+        defaultTrade: 'appliance',
+        markup: 20.0,
+        retailMult: 1.25,
+        notes: 'Appliance diagnostics, warranty repair & motor/sensor rebuilds.'
+      }
+    };
+
+    // --- DOM REFERENCES ---
+    const vendorSelectDropdown = document.getElementById('vendorSelectDropdown');
+    const vendorNameInput = document.getElementById('vendorNameInput');
+    const vendorInvoiceNumInput = document.getElementById('vendorInvoiceNumInput');
+    const vendorProfileBadge = document.getElementById('vendorProfileBadge');
+    const tradeCountLabel = document.getElementById('tradeCountLabel');
+    const vendorTradeInstruction = document.getElementById('vendorTradeInstruction');
+    const costQuotedVendorInput = document.getElementById('cost_quoted_vendor');
+    const quantTaskListContainer = document.getElementById('quantTaskListContainer');
+    const quantBenchmarkBadge = document.getElementById('quantBenchmarkBadge');
+    const scopeDescInput = document.getElementById('scopeDescriptionInput');
+    const customMarkupInput = document.getElementById('customMarkupInput');
+    const serviceFeeAmountInput = document.getElementById('serviceFeeAmount');
+    const includeServiceFeeCheckbox = document.getElementById('includeServiceFee');
+    const propAddressInput = document.getElementById('propAddressInput');
+    const cityInput = document.getElementById('cityInput');
+    const stateInput = document.getElementById('stateInput');
+    const zipInput = document.getElementById('zipCodeInput');
+    const taskNumberInput = document.getElementById('taskNumberInput');
+    const taxRateInput = document.getElementById('taxRateInput');
+    const locationCountyBadge = document.getElementById('locationCountyBadge');
+    const benchmarkSourceLabel = document.getElementById('benchmarkSourceLabel');
+
+    // Indiana ZIP-to-County lookup
+    const zipCountyMap = {
+      '46201': { city: 'Indianapolis', county: 'Marion County' },
+      '46202': { city: 'Indianapolis', county: 'Marion County' },
+      '46203': { city: 'Indianapolis', county: 'Marion County' },
+      '46204': { city: 'Indianapolis', county: 'Marion County' },
+      '46205': { city: 'Indianapolis', county: 'Marion County' },
+      '46208': { city: 'Indianapolis', county: 'Marion County' },
+      '46214': { city: 'Indianapolis', county: 'Marion County' },
+      '46216': { city: 'Indianapolis', county: 'Marion County' },
+      '46217': { city: 'Indianapolis', county: 'Marion County' },
+      '46218': { city: 'Indianapolis', county: 'Marion County' },
+      '46219': { city: 'Indianapolis', county: 'Marion County' },
+      '46220': { city: 'Indianapolis', county: 'Marion County' },
+      '46221': { city: 'Indianapolis', county: 'Marion County' },
+      '46222': { city: 'Indianapolis', county: 'Marion County' },
+      '46224': { city: 'Speedway', county: 'Marion County' },
+      '46225': { city: 'Indianapolis', county: 'Marion County' },
+      '46226': { city: 'Indianapolis', county: 'Marion County' },
+      '46227': { city: 'Indianapolis', county: 'Marion County' },
+      '46228': { city: 'Indianapolis', county: 'Marion County' },
+      '46229': { city: 'Indianapolis', county: 'Marion County' },
+      '46231': { city: 'Indianapolis', county: 'Marion County' },
+      '46234': { city: 'Indianapolis', county: 'Marion County' },
+      '46235': { city: 'Indianapolis', county: 'Marion County' },
+      '46236': { city: 'Indianapolis', county: 'Marion County' },
+      '46237': { city: 'Indianapolis', county: 'Marion County' },
+      '46239': { city: 'Indianapolis', county: 'Marion County' },
+      '46240': { city: 'Indianapolis', county: 'Marion County' },
+      '46241': { city: 'Indianapolis', county: 'Marion County' },
+      '46250': { city: 'Indianapolis', county: 'Marion County' },
+      '46254': { city: 'Indianapolis', county: 'Marion County' },
+      '46256': { city: 'Indianapolis', county: 'Marion County' },
+      '46259': { city: 'Indianapolis', county: 'Marion County' },
+      '46260': { city: 'Indianapolis', county: 'Marion County' },
+      '46268': { city: 'Indianapolis', county: 'Marion County' },
+      '46278': { city: 'Indianapolis', county: 'Marion County' },
+      '46032': { city: 'Carmel', county: 'Hamilton County' },
+      '46033': { city: 'Carmel', county: 'Hamilton County' },
+      '46037': { city: 'Fishers', county: 'Hamilton County' },
+      '46038': { city: 'Fishers', county: 'Hamilton County' },
+      '46060': { city: 'Noblesville', county: 'Hamilton County' },
+      '46062': { city: 'Noblesville', county: 'Hamilton County' },
+      '46074': { city: 'Westfield', county: 'Hamilton County' },
+      '46123': { city: 'Avon', county: 'Hendricks County' },
+      '46112': { city: 'Brownsburg', county: 'Hendricks County' },
+      '46168': { city: 'Plainfield', county: 'Hendricks County' },
+      '46142': { city: 'Greenwood', county: 'Johnson County' },
+      '46143': { city: 'Greenwood', county: 'Johnson County' },
+      '46077': { city: 'Zionsville', county: 'Boone County' },
+      '46140': { city: 'Greenfield', county: 'Hancock County' }
+    };
+
+    function updateLocationBadge(zip) {
+      if (!locationCountyBadge) return;
+      const cleanZip = String(zip).trim();
+      const match = zipCountyMap[cleanZip];
+      if (match) {
+        locationCountyBadge.textContent = `${match.city} (${match.county})`;
+        if (cityInput && (!cityInput.value || cleanZip !== '46203')) {
+          cityInput.value = match.city;
+        }
+      } else if (cleanZip.startsWith('46') || cleanZip.startsWith('47')) {
+        locationCountyBadge.textContent = `Indiana (ZIP: ${cleanZip})`;
+      } else {
+        locationCountyBadge.textContent = `Indianapolis (Marion County)`;
+      }
+    }
+
+    if (propAddressInput) {
+      propAddressInput.addEventListener('input', () => {
+        const text = propAddressInput.value;
+        const zipMatch = text.match(/\b(4[67]\d{3})\b/);
+        if (zipMatch && zipMatch[1]) {
+          const detectedZip = zipMatch[1];
+          if (zipInput) zipInput.value = detectedZip;
+          updateLocationBadge(detectedZip);
+          const zipInfo = zipCountyMap[detectedZip];
+          if (zipInfo && cityInput) cityInput.value = zipInfo.city;
+          recalculate();
+          return;
+        }
+        for (const [z, info] of Object.entries(zipCountyMap)) {
+          const regex = new RegExp(`\\b${info.city}\\b`, 'i');
+          if (regex.test(text)) {
+            if (cityInput) cityInput.value = info.city;
+            if (zipInput && !zipInput.value) zipInput.value = z;
+            updateLocationBadge(z);
+            recalculate();
+            break;
+          }
+        }
+      });
+    }
+
+    // Format Currency Helper
+    function fmt(val) {
+      return '$' + (Number(val) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      const msgEl = document.getElementById('toastMsg');
+      if (msgEl) msgEl.textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2500);
+    }
+
+    // --- POPULATE VENDOR DROPDOWN (ALPHABETICAL ORDER + BLANK DEFAULT) ---
+    function populateVendorDropdown() {
+      if (!vendorSelectDropdown) return;
+      vendorSelectDropdown.innerHTML = '';
+
+      // Default blank option
+      const blankOpt = document.createElement('option');
+      blankOpt.value = '';
+      blankOpt.textContent = '-- Select Subcontractor / Vendor --';
+      vendorSelectDropdown.appendChild(blankOpt);
+
+      // Sort vendor keys alphabetically by their displayed company name
+      const sortedKeys = Object.keys(vendorDatabase).sort((a, b) => {
+        return vendorDatabase[a].name.localeCompare(vendorDatabase[b].name);
+      });
+
+      sortedKeys.forEach(vKey => {
+        const v = vendorDatabase[vKey];
+        const opt = document.createElement('option');
+        opt.value = vKey;
+        opt.textContent = `${v.name} (${v.trades.map(t => t.toUpperCase()).join(', ')})`;
+        vendorSelectDropdown.appendChild(opt);
+      });
+
+      // Custom / Other Subcontractor at the bottom
+      const customOpt = document.createElement('option');
+      customOpt.value = 'custom';
+      customOpt.textContent = '+ Custom / Other Subcontractor';
+      vendorSelectDropdown.appendChild(customOpt);
+    }
+
+    // Apply Vendor Selection Routine
+    function applyVendorSelection(vendorId) {
+      selectedVendorId = vendorId;
+
+      if (!vendorId || vendorId === '') {
+        // Blank state
+        if (vendorNameInput) vendorNameInput.value = '';
+        if (vendorInvoiceNumInput) vendorInvoiceNumInput.value = '';
+        if (vendorProfileBadge) vendorProfileBadge.textContent = 'All Trades Available';
+        if (tradeCountLabel) tradeCountLabel.textContent = 'All 11 Trades';
+        if (vendorTradeInstruction) {
+          vendorTradeInstruction.textContent = 'Select a vendor above to filter trades and auto-apply their pre-negotiated markup, or pick any trade below directly.';
+        }
+
+        // Show all trade buttons
+        document.querySelectorAll('#tradeSelectorContainer .btn-trade').forEach(btn => {
+          btn.classList.remove('hidden', 'opacity-30', 'pointer-events-none');
+        });
+
+        targetMarkupPct = 20.0;
+        if (customMarkupInput) customMarkupInput.value = targetMarkupPct;
+        updateMarkupButtonStyles(targetMarkupPct);
+        recalculate();
+        return;
+      }
+
+      if (vendorId === 'custom') {
+        if (vendorNameInput) vendorNameInput.value = '';
+        if (vendorInvoiceNumInput) vendorInvoiceNumInput.value = '';
+        if (vendorProfileBadge) vendorProfileBadge.textContent = 'Custom Subcontractor';
+        if (tradeCountLabel) tradeCountLabel.textContent = 'All 11 Trades';
+        if (vendorTradeInstruction) {
+          vendorTradeInstruction.textContent = 'Enter custom subcontractor details. Select the applicable trade classification below.';
+        }
+
+        document.querySelectorAll('#tradeSelectorContainer .btn-trade').forEach(btn => {
+          btn.classList.remove('hidden', 'opacity-30', 'pointer-events-none');
+        });
+
+        targetMarkupPct = 20.0;
+        if (customMarkupInput) customMarkupInput.value = targetMarkupPct;
+        updateMarkupButtonStyles(targetMarkupPct);
+        recalculate();
+        return;
+      }
+
+      const v = vendorDatabase[vendorId];
+      if (!v) return;
+
+      if (vendorNameInput) vendorNameInput.value = v.name;
+      if (vendorInvoiceNumInput && !vendorInvoiceNumInput.value) vendorInvoiceNumInput.value = '';
+      if (vendorProfileBadge) vendorProfileBadge.textContent = `${v.trades.length} Trade(s) Authorized`;
+      if (tradeCountLabel) tradeCountLabel.textContent = `${v.trades.length} Active Trades`;
+      if (vendorTradeInstruction) {
+        vendorTradeInstruction.innerHTML = `<span class="font-bold text-indigo-900">${v.name}:</span> ${v.notes}`;
+      }
+
+      // Filter trade buttons
+      document.querySelectorAll('#tradeSelectorContainer .btn-trade').forEach(btn => {
+        const t = btn.getAttribute('data-trade');
+        if (v.trades.includes(t)) {
+          btn.classList.remove('hidden', 'opacity-30', 'pointer-events-none');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+
+      // Switch to default trade if current trade is not in vendor's list
+      if (!v.trades.includes(selectedTrade)) {
+        selectedTrade = v.defaultTrade;
+      }
+
+      targetMarkupPct = v.markup || 20.0;
+      retailMultiplier = v.retailMult || 1.28;
+      if (customMarkupInput) customMarkupInput.value = targetMarkupPct;
+      updateMarkupButtonStyles(targetMarkupPct);
+
+      highlightSelectedTradeButton();
+      renderHierarchicalTaskScope();
+      recalculate();
+    }
+
+    if (vendorSelectDropdown) {
+      vendorSelectDropdown.addEventListener('change', (e) => {
+        applyVendorSelection(e.target.value);
+      });
+    }
+
+    function updateMarkupButtonStyles(markupVal) {
+      document.querySelectorAll('.btn-markup').forEach(b => {
+        const val = parseFloat(b.getAttribute('data-val'));
+        if (val === markupVal) {
+          b.classList.remove('border-slate-600', 'text-slate-200');
+          b.classList.add('border-indigo-500', 'bg-indigo-500/20', 'text-indigo-300');
+        } else {
+          b.classList.remove('border-indigo-500', 'bg-indigo-500/20', 'text-indigo-300');
+          b.classList.add('border-slate-600', 'text-slate-200');
+        }
+      });
+    }
+
+    function highlightSelectedTradeButton() {
+      document.querySelectorAll('#tradeSelectorContainer .btn-trade').forEach(btn => {
+        const t = btn.getAttribute('data-trade');
+        if (t === selectedTrade) {
+          btn.classList.remove('border-slate-200', 'bg-slate-50');
+          btn.classList.add('border-2', 'border-indigo-600', 'bg-indigo-50/70', 'shadow-xs');
+        } else {
+          btn.classList.remove('border-2', 'border-indigo-600', 'bg-indigo-50/70', 'shadow-xs');
+          btn.classList.add('border-slate-200', 'bg-slate-50');
+        }
+      });
+    }
+
+    // --- HIERARCHICAL TASK CATALOG BY TRADE ---
+    const taskDatabaseByTrade = {
+      'hvac': [
+        {
+          categoryId: 'hvac_diag',
+          categoryTitle: '🔍 Diagnostic & Service Trips',
+          categoryDesc: 'Trip fees, diagnostic evaluations & initial troubleshooting',
+          items: [
+            { id: 'hvac_trip_diag', name: 'HVAC Diagnostic Service Call (AC or Furnace)', unitRate: 115.00, defaultQty: 1, unit: 'call' },
+            { id: 'hvac_maint_tuneup', name: 'Annual Seasonal Heating / Cooling Tune-up & Safety Check', unitRate: 145.00, defaultQty: 1, unit: 'system' },
+            { id: 'hvac_emer_trip', name: 'Emergency / After-Hours Diagnostic Service Trip', unitRate: 195.00, defaultQty: 1, unit: 'trip' }
+          ]
+        },
+        {
+          categoryId: 'hvac_furn_repair_gas',
+          categoryTitle: '🔥 Gas Furnace Repair & Component Replacements',
+          categoryDesc: 'Flame sensors, ignitors, gas valves, draft switches & inducer assemblies',
+          items: [
+            { id: 'hvac_furn_ignitor', name: 'Hot Surface Ignitor Replacement', unitRate: 245.00, defaultQty: 1, unit: 'item' },
+            { id: 'hvac_furn_flame_sensor', name: 'Flame Sensor Clean & Replacement', unitRate: 185.00, defaultQty: 1, unit: 'item' },
+            { id: 'hvac_furn_gas_valve', name: 'Gas Valve Assembly Replacement', unitRate: 465.00, defaultQty: 1, unit: 'assembly' },
+            { id: 'hvac_furn_press_switch', name: 'Draft Pressure Switch Replacement', unitRate: 225.00, defaultQty: 1, unit: 'switch' },
+            { id: 'hvac_furn_inducer_motor', name: 'Draft Inducer Blower Motor Assembly Replacement', unitRate: 585.00, defaultQty: 1, unit: 'motor' },
+            { id: 'hvac_furn_burner_clean', name: 'Furnace Burner Assembly & Orifice Deep Cleaning', unitRate: 195.00, defaultQty: 1, unit: 'service' },
+            { id: 'hvac_furn_limit_switch', name: 'High Temperature Limit Switch Replacement', unitRate: 215.00, defaultQty: 1, unit: 'switch' },
+            { id: 'hvac_furn_control_board', name: 'Integrated Furnace Control Circuit Board Replacement', unitRate: 525.00, defaultQty: 1, unit: 'board' }
+          ]
+        },
+        {
+          categoryId: 'hvac_furn_repair_elec',
+          categoryTitle: '⚡ Electric Furnace & Air Handler Repair',
+          categoryDesc: 'Heater pack strips, sequencers, thermal limits & relays',
+          items: [
+            { id: 'hvac_elec_heat_strip_5kw', name: 'Electric Heater Pack Replacement (5kW Heat Strip)', unitRate: 345.00, defaultQty: 1, unit: 'element' },
+            { id: 'hvac_elec_heat_strip_10kw', name: 'Electric Heater Pack Replacement (10kW Heat Strip)', unitRate: 445.00, defaultQty: 1, unit: 'element' },
+            { id: 'hvac_elec_sequencer', name: 'Heat Sequencer Relay Replacement', unitRate: 215.00, defaultQty: 1, unit: 'sequencer' },
+            { id: 'hvac_elec_relay', name: 'Heating Contactor / Relay Replacement', unitRate: 195.00, defaultQty: 1, unit: 'relay' },
+            { id: 'hvac_elec_wiring_repair', name: 'High-Voltage Wiring & Melted Terminal Harness Repair', unitRate: 265.00, defaultQty: 1, unit: 'repair' },
+            { id: 'hvac_elec_thermal_fuse', name: 'Thermal Cutoff Fuse & Limit Assembly Replacement', unitRate: 185.00, defaultQty: 1, unit: 'item' }
+          ]
+        },
+        {
+          categoryId: 'hvac_blower_motor',
+          categoryTitle: '💨 Blower Motor & Airflow Repairs',
+          categoryDesc: 'PSC & ECM blower motors, wheels, run capacitors & housing',
+          items: [
+            { id: 'hvac_blower_psc', name: 'Standard PSC Indoor Blower Motor Replacement', unitRate: 525.00, defaultQty: 1, unit: 'motor' },
+            { id: 'hvac_blower_ecm', name: 'Variable Speed ECM Blower Motor & Module Replacement', unitRate: 895.00, defaultQty: 1, unit: 'motor' },
+            { id: 'hvac_blower_cap', name: 'Blower Motor Run Capacitor Replacement', unitRate: 175.00, defaultQty: 1, unit: 'capacitor' },
+            { id: 'hvac_blower_wheel', name: 'Blower Wheel (Squirrel Cage) Replacement & Balancing', unitRate: 345.00, defaultQty: 1, unit: 'wheel' },
+            { id: 'hvac_blower_trans', name: '24V Control Transformer Replacement', unitRate: 195.00, defaultQty: 1, unit: 'transformer' }
+          ]
+        },
+        {
+          categoryId: 'hvac_ac_repair',
+          categoryTitle: '❄️ Air Conditioner & Heat Pump Repair',
+          categoryDesc: 'Capacitors, contactors, condenser fans, coil cleaning & refrigerant',
+          items: [
+            { id: 'hvac_ac_dual_cap', name: 'Dual Run Capacitor Replacement (Fan/Compressor)', unitRate: 265.00, defaultQty: 1, unit: 'capacitor' },
+            { id: 'hvac_ac_contactor', name: 'Condenser Heavy-Duty Contactor Relay Replacement', unitRate: 225.00, defaultQty: 1, unit: 'contactor' },
+            { id: 'hvac_ac_fan_motor', name: 'Outdoor Condenser Fan Motor Replacement', unitRate: 495.00, defaultQty: 1, unit: 'motor' },
+            { id: 'hvac_ac_fan_blade', name: 'Condenser Fan Blade Assembly Replacement', unitRate: 215.00, defaultQty: 1, unit: 'blade' },
+            { id: 'hvac_ac_coil_clean', name: 'Outdoor Condenser Coil Chemical Clean & Fin Straighten', unitRate: 195.00, defaultQty: 1, unit: 'unit' },
+            { id: 'hvac_ac_hard_start', name: 'Compressor Hard Start Kit Furnish & Install', unitRate: 285.00, defaultQty: 1, unit: 'kit' },
+            { id: 'hvac_ac_refrig_diag', name: 'Refrigerant Leak Search & Electronic Sniffer Diagnostic', unitRate: 265.00, defaultQty: 1, unit: 'service' },
+            { id: 'hvac_ac_freon_410a', name: 'R-410A Refrigerant Recharge (Per Pound)', unitRate: 95.00, defaultQty: 2, unit: 'lbs' },
+            { id: 'hvac_hp_reversing_valve', name: 'Heat Pump 4-Way Reversing Valve Replacement', unitRate: 850.00, defaultQty: 1, unit: 'valve' },
+            { id: 'hvac_hp_defrost_board', name: 'Heat Pump Defrost Control Board Replacement', unitRate: 385.00, defaultQty: 1, unit: 'board' }
+          ]
+        },
+        {
+          categoryId: 'hvac_drainage_thermo',
+          categoryTitle: '🌡️ Thermostats, Drains & Line Repairs',
+          categoryDesc: 'Smart thermostats, float switches, drain lines & disconnects',
+          items: [
+            { id: 'hvac_thermo_prog', name: 'Standard Programmable Thermostat Furnish & Install', unitRate: 195.00, defaultQty: 1, unit: 'thermostat' },
+            { id: 'hvac_thermo_smart', name: 'Smart Wi-Fi Thermostat (Honeywell/Nest) Furnish & Install', unitRate: 310.00, defaultQty: 1, unit: 'thermostat' },
+            { id: 'hvac_drain_clear', name: 'Condensate Drain Line Mechanical Flush & Chemical Clear', unitRate: 175.00, defaultQty: 1, unit: 'line' },
+            { id: 'hvac_drain_pump', name: 'Automatic Condensate Removal Pump Replacement', unitRate: 245.00, defaultQty: 1, unit: 'pump' },
+            { id: 'hvac_float_switch', name: 'Condensate Overflow Float Safety Switch Furnish & Install', unitRate: 185.00, defaultQty: 1, unit: 'switch' },
+            { id: 'hvac_elec_disconnect', name: 'Outdoor 30/60 Amp AC Electrical Disconnect Box & Whip', unitRate: 265.00, defaultQty: 1, unit: 'unit' }
+          ]
+        },
+        {
+          categoryId: 'hvac_furn_replace',
+          categoryTitle: '🏭 Furnace Replacement (Unit Only)',
+          categoryDesc: '80% Standard AFUE or 90%+ High Efficiency Condensing Furnaces',
+          items: [
+            { id: 'hvac_furn_repl_80', name: 'Gas Furnace Replacement: 80% AFUE Standard (Up to 80k BTU)', unitRate: 3250.00, defaultQty: 1, unit: 'furnace' },
+            { id: 'hvac_furn_repl_90', name: 'Gas Furnace Replacement: 90%+ High Efficiency Condensing', unitRate: 3950.00, defaultQty: 1, unit: 'furnace' },
+            { id: 'hvac_elec_handler_repl', name: 'Electric Air Handler / Furnace Replacement (Unit Only)', unitRate: 2850.00, defaultQty: 1, unit: 'handler' }
+          ]
+        },
+        {
+          categoryId: 'hvac_ac_replace',
+          categoryTitle: '❄️ Air Conditioner / Heat Pump Replacement (Outdoor Unit Only)',
+          categoryDesc: 'Outdoor condensing unit replacement with pad and reconnect',
+          items: [
+            { id: 'hvac_ac_condenser_repl', name: 'AC Condenser Replacement: 14.3 SEER2 (Outdoor Unit Only)', unitRate: 3450.00, defaultQty: 1, unit: 'condenser' },
+            { id: 'hvac_hp_condenser_repl', name: 'Heat Pump Condenser Replacement: 14.3 SEER2 (Outdoor Only)', unitRate: 3950.00, defaultQty: 1, unit: 'heat pump' },
+            { id: 'hvac_evap_coil_repl', name: 'Cased Evaporator A-Coil Replacement (Indoor Only)', unitRate: 1650.00, defaultQty: 1, unit: 'coil' }
+          ]
+        },
+        {
+          categoryId: 'hvac_combo_replace',
+          categoryTitle: '📦 Full HVAC System Packages',
+          categoryDesc: 'Complete matching split systems with condenser, coil & furnace',
+          items: [
+            { id: 'hvac_ac_coil_combo', name: 'AC Condenser & Matching Evaporator Coil Replacement', unitRate: 4950.00, defaultQty: 1, unit: 'combo' },
+            { id: 'hvac_hp_airhandler_combo', name: 'Complete Heat Pump & Matching Air Handler System Package', unitRate: 6450.00, defaultQty: 1, unit: 'system' },
+            { id: 'hvac_full_split_80', name: 'Full Split System Package: 80% Gas Furnace + AC + Coil', unitRate: 7200.00, defaultQty: 1, unit: 'system' },
+            { id: 'hvac_full_split_96', name: 'Full Split System: 96% High Efficiency Gas Furnace + AC + Coil', unitRate: 8450.00, defaultQty: 1, unit: 'system' },
+            { id: 'hvac_size_upcharge', name: 'Capacity Sizing Modifier: 4.0 to 5.0 Ton Residential Upgrade', unitRate: 850.00, defaultQty: 1, unit: 'upgrade' }
+          ]
+        }
+      ],
+
+      'plumbing': [
+        {
+          categoryId: 'plumb_drains',
+          categoryTitle: '🪠 Drain Cleaning & Mechanical Cabling',
+          categoryDesc: 'Augering, cleanout cabling, and root removal',
+          items: [
+            { id: 'plumb_tub_drain', name: 'Cable Clogged Tub or Shower Drain (Mechanical Snake)', unitRate: 215.00, defaultQty: 1, unit: 'drain' },
+            { id: 'plumb_sink_drain', name: 'Cable Kitchen Sink or Lavatory Drain Line', unitRate: 225.00, defaultQty: 1, unit: 'drain' },
+            { id: 'plumb_toilet_auger', name: 'Toilet Drain Mechanical Augering / Clearing', unitRate: 219.00, defaultQty: 1, unit: 'toilet' },
+            { id: 'plumb_floor_drain', name: 'Basement Floor Drain Cabling (Mechanical Snake)', unitRate: 285.00, defaultQty: 1, unit: 'drain' },
+            { id: 'plumb_main_snake', name: 'Main Sewer Lateral Mechanical Cabling (Cleanout Access)', unitRate: 395.00, defaultQty: 1, unit: 'lateral' },
+            { id: 'plumb_hydro_jet', name: 'High-Pressure Hydro-Jetting Sewer Line (Grease/Roots)', unitRate: 675.00, defaultQty: 1, unit: 'line' }
+          ]
+        },
+        {
+          categoryId: 'plumb_toilets',
+          categoryTitle: '🚽 Toilet Repairs & Replacements',
+          categoryDesc: 'Rebuilds, reseals, flange repairs & new installations',
+          items: [
+            { id: 'plumb_toilet_pull_reset', name: 'Pull & Reset Leaking Toilet with New Wax Ring & Closet Bolts', unitRate: 265.00, defaultQty: 1, unit: 'toilet' },
+            { id: 'plumb_toilet_tank_rebuild', name: 'Complete Toilet Tank Rebuild (Fill Valve, Flapper, Supply Line)', unitRate: 195.00, defaultQty: 1, unit: 'toilet' },
+            { id: 'plumb_toilet_replace_std', name: 'Furnish & Install Standard 2-Piece White Porcelain Toilet', unitRate: 465.00, defaultQty: 1, unit: 'toilet' },
+            { id: 'plumb_toilet_replace_ada', name: 'Furnish & Install Comfort Height / ADA Elongated Toilet', unitRate: 525.00, defaultQty: 1, unit: 'toilet' }
+          ]
+        },
+        {
+          categoryId: 'plumb_fixtures',
+          categoryTitle: '🚿 Faucets, Sinks & Valves',
+          categoryDesc: 'Kitchen, bathroom fixtures, hose bibs & shutoffs',
+          items: [
+            { id: 'plumb_faucet_kitchen', name: 'Furnish & Install Kitchen Sink Faucet with Pull-Down Sprayer', unitRate: 345.00, defaultQty: 1, unit: 'faucet' },
+            { id: 'plumb_faucet_lavatory', name: 'Furnish & Install Bathroom Lavatory Faucet & Pop-Up Drain', unitRate: 285.00, defaultQty: 1, unit: 'faucet' },
+            { id: 'plumb_disposal_replace', name: 'Furnish & Install 1/2 HP Garbage Disposal Unit', unitRate: 295.00, defaultQty: 1, unit: 'unit' },
+            { id: 'plumb_hose_bib', name: 'Replace Exterior Frost-Free Hose Bib / Boiler Drain Spigot', unitRate: 275.00, defaultQty: 1, unit: 'spigot' },
+            { id: 'plumb_shutoff_valves', name: 'Replace Corroded Quarter-Turn Angle Stop Shut-off Valves', unitRate: 145.00, defaultQty: 2, unit: 'valves' }
+          ]
+        },
+        {
+          categoryId: 'plumb_water_heaters',
+          categoryTitle: '🔥 Water Heater Repairs & Replacements',
+          categoryDesc: 'Gas & electric tank replacements, expansion tanks & elements',
+          items: [
+            { id: 'plumb_wh_gas_40', name: 'Furnish & Install 40-Gallon Atmospheric Gas Water Heater', unitRate: 1850.00, defaultQty: 1, unit: 'tank' },
+            { id: 'plumb_wh_gas_50', name: 'Furnish & Install 50-Gallon Atmospheric Gas Water Heater', unitRate: 2050.00, defaultQty: 1, unit: 'tank' },
+            { id: 'plumb_wh_elec_40', name: 'Furnish & Install 40-Gallon Electric Water Heater', unitRate: 1650.00, defaultQty: 1, unit: 'tank' },
+            { id: 'plumb_wh_elec_50', name: 'Furnish & Install 50-Gallon Electric Water Heater', unitRate: 1850.00, defaultQty: 1, unit: 'tank' },
+            { id: 'plumb_wh_expansion_tank', name: 'Thermal Expansion Tank Furnish & Code Installation', unitRate: 295.00, defaultQty: 1, unit: 'tank' },
+            { id: 'plumb_wh_elements_thermo', name: 'Replace Electric Water Heater Dual Heating Elements & Thermostats', unitRate: 345.00, defaultQty: 1, unit: 'repair' }
+          ]
+        }
+      ],
+
+      'tree': [
+        {
+          categoryId: 'tree_trim',
+          categoryTitle: '✂️ Tree Trimming & Canopy Elevation',
+          categoryDesc: 'Clearance from roofs, lines, branches and deadwood',
+          items: [
+            { id: 'tree_trim_roof', name: 'Roof Clearance Tree Pruning & Canopy Elevation', unitRate: 425.00, defaultQty: 1, unit: 'tree' },
+            { id: 'tree_limb_single', name: 'Remove Broken or Hanging Hazardous Heavy Tree Limb', unitRate: 265.00, defaultQty: 1, unit: 'limb' },
+            { id: 'tree_trim_lot', name: 'Whole-Yard Tree Maintenance & Overgrowth Trimming', unitRate: 850.00, defaultQty: 1, unit: 'lot' }
+          ]
+        },
+        {
+          categoryId: 'tree_removal',
+          categoryTitle: '🪓 Tree Removal & Stump Grinding',
+          categoryDesc: 'Complete felling, haul away, and mechanical stump grinding',
+          items: [
+            { id: 'tree_remove_small', name: 'Small Tree Removal (Under 20ft) & Haul Away', unitRate: 650.00, defaultQty: 1, unit: 'tree' },
+            { id: 'tree_remove_medium', name: 'Medium Tree Removal (20ft - 40ft) & Haul Away', unitRate: 1250.00, defaultQty: 1, unit: 'tree' },
+            { id: 'tree_remove_large', name: 'Large Hazardous Tree Removal (Over 40ft) with Rigging', unitRate: 2450.00, defaultQty: 1, unit: 'tree' },
+            { id: 'tree_stump_grind', name: 'Mechanical Tree Stump Grinding Below Grade', unitRate: 245.00, defaultQty: 1, unit: 'stump' }
+          ]
+        },
+        {
+          categoryId: 'tree_brush',
+          categoryTitle: '🌿 Vegetation Overgrowth & Brush Clearance',
+          categoryDesc: 'Fence lines, alleys, sheds, and invasive vegetation',
+          items: [
+            { id: 'tree_brush_overgrowth', name: 'Fence Line & Shed Heavy Vegetation Overgrowth Clearing', unitRate: 385.00, defaultQty: 1, unit: 'area' },
+            { id: 'tree_gutter_clean', name: 'Whole-House Gutter Blow-Out & Downspout Flush', unitRate: 215.00, defaultQty: 1, unit: 'house' }
+          ]
+        }
+      ],
+
+      'roofing_construction': [
+        {
+          categoryId: 'roof_repairs',
+          categoryTitle: '🏠 Roof & Chimney Repairs',
+          categoryDesc: 'Shingle patching, flashing rebuilds, leaks & vent boots',
+          items: [
+            { id: 'roof_shingle_patch', name: 'Architectural / 3-Tab Shingle Blow-Off Leak Patch', unitRate: 385.00, defaultQty: 1, unit: 'patch' },
+            { id: 'roof_pipe_boot', name: 'Replace Failed Neoprene Plumbing Vent Pipe Boot Flashing', unitRate: 245.00, defaultQty: 1, unit: 'boot' },
+            { id: 'roof_chimney_flashing', name: 'Chimney Step & Counter Flashing Rebuild with Ice/Water Shield', unitRate: 550.00, defaultQty: 1, unit: 'chimney' },
+            { id: 'roof_valley_repair', name: 'Roof Valley Flashing Leak Repair & Ice/Water Shielding', unitRate: 495.00, defaultQty: 1, unit: 'valley' }
+          ]
+        },
+        {
+          categoryId: 'roof_gutters_siding',
+          categoryTitle: '🌧️ Gutters, Soffit & Fascia',
+          categoryDesc: 'Gutter re-pitching, seamless repairs, fascia wrapping',
+          items: [
+            { id: 'roof_gutter_repair', name: 'Gutter Re-hanging, Pitch Correction & Seam Sealing', unitRate: 245.00, defaultQty: 1, unit: 'run' },
+            { id: 'roof_downspout_replace', name: 'Replace Damaged Aluminum Downspout & Install Diverter', unitRate: 185.00, defaultQty: 1, unit: 'downspout' },
+            { id: 'roof_soffit_fascia', name: 'Repair Rotted Wood Fascia & Aluminum Soffit Wrapping (Per 10ft)', unitRate: 325.00, defaultQty: 1, unit: 'section' },
+            { id: 'roof_vinyl_siding_patch', name: 'Vinyl Siding Wind Damage Repair / Re-securing', unitRate: 295.00, defaultQty: 1, unit: 'repair' }
+          ]
+        }
+      ],
+
+      'electrical': [
+        {
+          categoryId: 'elec_diag',
+          categoryTitle: '⚡ Diagnostic & Safety Inspections',
+          categoryDesc: 'Dead outlets, tripping breakers & flickering circuits',
+          items: [
+            { id: 'elec_trip_diag', name: 'Electrical Diagnostic Service Trip & Circuit Tracing', unitRate: 165.00, defaultQty: 1, unit: 'trip' },
+            { id: 'elec_breaker_replace', name: 'Replace Standard 15A/20A Circuit Breaker', unitRate: 195.00, defaultQty: 1, unit: 'breaker' },
+            { id: 'elec_gfci_replace', name: 'Furnish & Install GFCI Receptacle (Kitchen/Bath/Ext)', unitRate: 145.00, defaultQty: 2, unit: 'outlet' }
+          ]
+        },
+        {
+          categoryId: 'elec_fixtures',
+          categoryTitle: '💡 Fixtures & Devices',
+          categoryDesc: 'Lighting, ceiling fans, smoke detectors & baseboard heaters',
+          items: [
+            { id: 'elec_fixture_replace', name: 'Replace Light Fixture (Flush Mount or Vanity)', unitRate: 165.00, defaultQty: 1, unit: 'fixture' },
+            { id: 'elec_ceiling_fan', name: 'Furnish & Install Ceiling Fan with Light Kit', unitRate: 295.00, defaultQty: 1, unit: 'fan' },
+            { id: 'elec_smoke_combo', name: 'Hardwired Interconnected Smoke & CO Detector Replacement', unitRate: 115.00, defaultQty: 3, unit: 'device' }
+          ]
+        }
+      ],
+
+      'turnover': [
+        {
+          categoryId: 'turn_punch',
+          categoryTitle: '🔨 Unit Rehabilitation & Punch-List',
+          categoryDesc: 'Turnover readiness, locksets, blinds & repairs',
+          items: [
+            { id: 'turn_deadbolt_rekey', name: 'Electronic Deadbolt Furnish, Mortise & Install', unitRate: 200.00, defaultQty: 1, unit: 'lock' },
+            { id: 'turn_rekey_suite', name: 'Rekey Property Entry Knobs & Deadbolts (Matching Key Set)', unitRate: 195.00, defaultQty: 1, unit: 'set' },
+            { id: 'turn_blinds_replace', name: 'Furnish & Install 1" or 2" Cordless Faux Wood Window Blinds', unitRate: 65.00, defaultQty: 4, unit: 'window' },
+            { id: 'turn_punch_room', name: 'Full Unit Rent-Ready Punch-Out (Doors, Cabinet Pulls, Hardware)', unitRate: 345.00, defaultQty: 1, unit: 'unit' }
+          ]
+        }
+      ],
+
+      'cleaning': [
+        {
+          categoryId: 'clean_turnover',
+          categoryTitle: '🧹 Turnover Deep Cleaning Services',
+          categoryDesc: 'Rental-ready sanitation, appliances & bathrooms',
+          items: [
+            { id: 'clean_1bed_turn', name: 'Full Turnover Deep Clean: 1 Bedroom / 1 Bath Unit', unitRate: 165.00, defaultQty: 1, unit: 'clean' },
+            { id: 'clean_2bed_turn', name: 'Full Turnover Deep Clean: 2-3 Bedroom / 1-2 Bath Home', unitRate: 245.00, defaultQty: 1, unit: 'clean' },
+            { id: 'clean_touchup', name: 'Touch-Up / Show-Ready Clean (Post Maintenance Punch)', unitRate: 95.00, defaultQty: 1, unit: 'clean' },
+            { id: 'clean_appliance_deep', name: 'Heavy Oven / Range & Refrigerator Deep Sanitation', unitRate: 85.00, defaultQty: 1, unit: 'service' }
+          ]
+        }
+      ],
+
+      'drywall': [
+        {
+          categoryId: 'drywall_paint',
+          categoryTitle: '🎨 Drywall Patching & Interior Painting',
+          categoryDesc: 'Door knob holes, ceiling leak repairs & room repaints',
+          items: [
+            { id: 'drywall_small_patch', name: 'Drywall Hole Patch (Up to 12" x 12"), Tape, Sand & Paint', unitRate: 175.00, defaultQty: 1, unit: 'patch' },
+            { id: 'drywall_ceiling_leak', name: 'Ceiling Water Damage Drywall Replacement & Texture Match', unitRate: 345.00, defaultQty: 1, unit: 'repair' },
+            { id: 'drywall_room_paint', name: 'Prep & Paint Standard Bedroom Walls (2 Coats Latex)', unitRate: 395.00, defaultQty: 1, unit: 'room' }
+          ]
+        }
+      ],
+
+      'flooring': [
+        {
+          categoryId: 'floor_repairs',
+          categoryTitle: '🪵 Luxury Vinyl Plank & Carpet Services',
+          categoryDesc: 'LVP plank repair, carpet stretching & threshold transitions',
+          items: [
+            { id: 'floor_lvp_repair', name: 'Luxury Vinyl Plank (LVP) Damaged Plank Board Replacement', unitRate: 245.00, defaultQty: 1, unit: 'repair' },
+            { id: 'floor_transition_replace', name: 'Furnish & Install Metal / Vinyl Reducer Threshold Strip', unitRate: 85.00, defaultQty: 2, unit: 'strip' },
+            { id: 'floor_carpet_stretch', name: 'Power Stretch Loose / Buckling Carpet (Per Room)', unitRate: 145.00, defaultQty: 1, unit: 'room' }
+          ]
+        }
+      ],
+
+      'general': [
+        {
+          categoryId: 'gen_carpentry',
+          categoryTitle: '🔨 General Handyman & Carpentry Repairs',
+          categoryDesc: 'Bannisters, handrails, doors, siding & weatherproofing',
+          items: [
+            { id: 'gen_stair_bannister', name: 'Re-secure / Repair Loose Basement or Interior Stair Bannister', unitRate: 195.00, defaultQty: 1, unit: 'rail' },
+            { id: 'gen_int_door_slab', name: 'Furnish, Mortise & Hang Hollow Core Interior Door Slab', unitRate: 265.00, defaultQty: 1, unit: 'door' },
+            { id: 'gen_weatherstrip', name: 'Exterior Door Weatherstripping & Adjustable Threshold Sweep', unitRate: 145.00, defaultQty: 1, unit: 'door' },
+            { id: 'gen_handyman_hourly', name: 'General Maintenance Service (2-Hour Minimum Block)', unitRate: 170.00, defaultQty: 1, unit: 'block' }
+          ]
+        }
+      ],
+
+      'appliance': [
+        {
+          categoryId: 'app_diag_parts',
+          categoryTitle: '⚙️ Used Appliance Diagnostic & Part Replacement',
+          categoryDesc: 'Washer pumps, dryer elements, oven ignitors & refurbished units',
+          items: [
+            { id: 'app_diag_trip', name: 'Appliance Diagnostic Trip Fee & Troubleshooting', unitRate: 95.00, defaultQty: 1, unit: 'trip' },
+            { id: 'app_washer_pump', name: 'Washing Machine Drain Pump Replacement', unitRate: 245.00, defaultQty: 1, unit: 'pump' },
+            { id: 'app_dryer_heating_elem', name: 'Clothes Dryer Heating Element & Thermal Fuse Replacement', unitRate: 265.00, defaultQty: 1, unit: 'repair' },
+            { id: 'app_refurb_refrig', name: 'Furnish, Deliver & Install Refurbished Refrigerator Unit', unitRate: 625.00, defaultQty: 1, unit: 'unit' },
+            { id: 'app_refurb_washer', name: 'Furnish, Deliver & Install Refurbished Top-Load Washing Machine', unitRate: 465.00, defaultQty: 1, unit: 'unit' }
+          ]
+        }
+      ]
+    };
+
+    // --- RENDER SCOPE QUANTIFICATION ENGINE (ACCORDIONS) ---
+    function renderHierarchicalTaskScope() {
+      if (!quantTaskListContainer) return;
+      quantTaskListContainer.innerHTML = '';
+
+      const tradeCategories = taskDatabaseByTrade[selectedTrade] || [];
+      if (tradeCategories.length === 0) {
+        quantTaskListContainer.innerHTML = '<div class="p-4 text-center text-xs text-slate-400">No pre-set task groups available for this classification. Use the scope notes box below.</div>';
+        return;
+      }
+
+      tradeCategories.forEach(cat => {
+        const catBox = document.createElement('div');
+        catBox.className = 'border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs transition-all';
+
+        // Count how many tasks inside this category are active
+        let activeCountInCat = 0;
+        cat.items.forEach(it => {
+          if (activeTaskSelections[it.id]) activeCountInCat++;
+        });
+
+        const isExpanded = !!expandedCategories[cat.categoryId];
+
+        // Accordion Header
+        const headerBtn = document.createElement('button');
+        headerBtn.type = 'button';
+        headerBtn.className = `w-full px-3.5 py-2.5 flex items-center justify-between text-left transition-colors cursor-pointer ${
+          isExpanded ? 'bg-slate-100/80 border-b border-slate-200' : 'bg-slate-50 hover:bg-slate-100/70'
+        }`;
+
+        headerBtn.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-800">${cat.categoryTitle}</span>
+            ${activeCountInCat > 0 ? `<span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">${activeCountInCat} Active</span>` : ''}
+          </div>
+          <div class="flex items-center gap-1.5 text-slate-400 text-xs">
+            <span class="text-[10px] hidden sm:inline">${cat.items.length} items</span>
+            <span class="font-bold transform transition-transform ${isExpanded ? 'rotate-180' : ''}">▼</span>
+          </div>
+        `;
+
+        headerBtn.addEventListener('click', () => {
+          expandedCategories[cat.categoryId] = !expandedCategories[cat.categoryId];
+          renderHierarchicalTaskScope();
+        });
+
+        catBox.appendChild(headerBtn);
+
+        // Accordion Content Body
+        if (isExpanded) {
+          const bodyDiv = document.createElement('div');
+          bodyDiv.className = 'p-3 space-y-2.5 bg-white divide-y divide-slate-100';
+
+          cat.items.forEach(item => {
+            const isChecked = !!activeTaskSelections[item.id];
+            const currentQty = isChecked ? activeTaskSelections[item.id].qty : item.defaultQty;
+
+            const row = document.createElement('div');
+            row.className = `pt-2 first:pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-1.5 rounded-lg transition-colors ${
+              isChecked ? 'bg-emerald-50/50 border border-emerald-200/80' : 'hover:bg-slate-50'
+            }`;
+
+            row.innerHTML = `
+              <div class="flex items-start gap-2 flex-1">
+                <input type="checkbox" id="task_chk_${item.id}" ${isChecked ? 'checked' : ''} class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500 mt-0.5 cursor-pointer">
+                <div>
+                  <label for="task_chk_${item.id}" class="text-xs font-semibold text-slate-800 cursor-pointer block">${item.name}</label>
+                  <span class="text-[10px] text-slate-500">Retail Baseline: <strong class="text-slate-700">${fmt(item.unitRate)}</strong> / ${item.unit}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-end sm:self-center pl-6 sm:pl-0">
+                <span class="text-[10px] text-slate-400">Qty:</span>
+                <input type="number" id="task_qty_${item.id}" value="${currentQty}" min="1" step="1" class="w-14 px-1.5 py-0.5 text-xs font-bold text-center rounded border border-slate-300 bg-white text-slate-800 focus:ring-1 focus:ring-indigo-500">
+                <span class="text-[10px] text-slate-500 w-12 text-right font-mono">${fmt(item.unitRate * currentQty)}</span>
+              </div>
+            `;
+
+            // Checkbox event
+            const chk = row.querySelector(`#task_chk_${item.id}`);
+            const qtyInput = row.querySelector(`#task_qty_${item.id}`);
+
+            chk.addEventListener('change', () => {
+              if (chk.checked) {
+                const q = Math.max(1, parseInt(qtyInput.value) || 1);
+                activeTaskSelections[item.id] = {
+                  id: item.id,
+                  name: item.name,
+                  rate: item.unitRate,
+                  unit: item.unit,
+                  qty: q,
+                  subtotal: item.unitRate * q
+                };
+              } else {
+                delete activeTaskSelections[item.id];
+              }
+              renderHierarchicalTaskScope();
+              recalculate();
+            });
+
+            // Qty input event
+            qtyInput.addEventListener('input', () => {
+              const q = Math.max(1, parseInt(qtyInput.value) || 1);
+              if (activeTaskSelections[item.id]) {
+                activeTaskSelections[item.id].qty = q;
+                activeTaskSelections[item.id].subtotal = item.unitRate * q;
+              }
+              recalculate();
+            });
+
+            bodyDiv.appendChild(row);
+          });
+
+          catBox.appendChild(bodyDiv);
+        }
+
+        quantTaskListContainer.appendChild(catBox);
+      });
+    }
+
+    // Reset Tasks button
+    const btnClearTasks = document.getElementById('btn_clear_tasks');
+    if (btnClearTasks) {
+      btnClearTasks.addEventListener('click', () => {
+        activeTaskSelections = {};
+        renderHierarchicalTaskScope();
+        recalculate();
+        showToast('Scope quantification tasks reset.');
+      });
+    }
+
+    // Trade button click handlers
+    document.querySelectorAll('#tradeSelectorContainer .btn-trade').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const trade = e.currentTarget.getAttribute('data-trade');
+        const dMarkup = parseFloat(e.currentTarget.getAttribute('data-default-markup')) || 20;
+        const rMult = parseFloat(e.currentTarget.getAttribute('data-retail-mult')) || 1.28;
+
+        selectedTrade = trade;
+        retailMultiplier = rMult;
+
+        // Reset accordions to collapsed when changing trade
+        expandedCategories = {};
+
+        // Highlight UI
+        highlightSelectedTradeButton();
+        renderHierarchicalTaskScope();
+        recalculate();
+      });
+    });
+
+    // Strategy Button Click Handlers
+    document.querySelectorAll('.btn-strategy').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const strat = e.currentTarget.getAttribute('data-strategy');
+        currentPricingStrategy = strat;
+        document.querySelectorAll('.btn-strategy').forEach(b => {
+          b.classList.remove('border-2', 'border-indigo-500', 'bg-indigo-950/60');
+          b.classList.add('border', 'border-slate-600', 'bg-slate-900');
+        });
+        e.currentTarget.classList.remove('border', 'border-slate-600', 'bg-slate-900');
+        e.currentTarget.classList.add('border-2', 'border-indigo-500', 'bg-indigo-950/60');
+        recalculate();
+      });
+    });
+
+    // Quick Markup Buttons
+    document.querySelectorAll('.btn-markup').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        targetMarkupPct = parseFloat(e.currentTarget.getAttribute('data-val'));
+        if (customMarkupInput) customMarkupInput.value = targetMarkupPct;
+        updateMarkupButtonStyles(targetMarkupPct);
+        recalculate();
+      });
+    });
+
+    if (customMarkupInput) {
+      customMarkupInput.addEventListener('input', (e) => {
+        targetMarkupPct = parseFloat(e.target.value) || 0;
+        updateMarkupButtonStyles(targetMarkupPct);
+        recalculate();
+      });
+    }
+
+    // --- MAIN RECALCULATION ENGINE ---
+    function recalculate() {
+      const quotedVendorCost = parseFloat(costQuotedVendorInput ? costQuotedVendorInput.value : 0) || 0;
+      const totalSubCost = quotedVendorCost;
+
+      // 1. Calculate Task-Quantified Market Benchmark
+      let quantifiedTaskTotal = 0;
+      let selectedTaskCount = 0;
+      Object.values(activeTaskSelections).forEach(t => {
+        quantifiedTaskTotal += (t.subtotal || 0);
+        selectedTaskCount++;
+      });
+
+      if (quantBenchmarkBadge) {
+        quantBenchmarkBadge.textContent = selectedTaskCount > 0 ? `Tasks: ${fmt(quantifiedTaskTotal)}` : 'No tasks selected';
+      }
+
+      // 2. Determine Regional Retail Market Value
+      let totalMarketValue = 0;
+      let hasQuantifiedBenchmark = selectedTaskCount > 0 && quantifiedTaskTotal > 0;
+
+      if (hasQuantifiedBenchmark) {
+        totalMarketValue = quantifiedTaskTotal;
+        if (benchmarkSourceLabel) benchmarkSourceLabel.textContent = `Quantified Market (${selectedTaskCount} Tasks)`;
+      } else {
+        totalMarketValue = totalSubCost * retailMultiplier;
+        if (benchmarkSourceLabel) benchmarkSourceLabel.textContent = 'Regional Retail Market Value';
+      }
+
+      // 3. PM Client Billable Calculation with Market-Anchored Optimization
+      const markupRatio = 1 + (targetMarkupPct / 100);
+      const includeFee = includeServiceFeeCheckbox ? includeServiceFeeCheckbox.checked : true;
+      const feeAmount = includeFee ? (parseFloat(serviceFeeAmountInput ? serviceFeeAmountInput.value : 25) || 0) : 0;
+      const feeTiming = document.querySelector('input[name="feeTiming"]:checked')?.value || 'before';
+
+      let clientFinalQuote = 0;
+      let formulaNote = '';
+
+      // Cost-plus baseline floor
+      const costPlusFloor = (totalSubCost > 0) ? (totalSubCost * markupRatio) : 0;
+
+      if (totalSubCost === 0 && !hasQuantifiedBenchmark) {
+        clientFinalQuote = 0;
+        formulaNote = 'Enter vendor quoted amount to calculate proposal';
+      } else if (totalSubCost === 0 && hasQuantifiedBenchmark) {
+        clientFinalQuote = Math.round((quantifiedTaskTotal + feeAmount) / 11) * 11;
+        formulaNote = `(Market baseline $${quantifiedTaskTotal.toLocaleString()} + $${feeAmount} fee rounded to 11×${Math.round(clientFinalQuote/11)})`;
+      } else {
+        let targetAmount = costPlusFloor;
+
+        // Apply selected Market Strategy if benchmark exists
+        if (totalMarketValue > 0) {
+          if (currentPricingStrategy === 'cost_plus') {
+            targetAmount = costPlusFloor;
+          } else if (currentPricingStrategy === 'max_value') {
+            const discountedMarket = totalMarketValue * 0.88;
+            targetAmount = Math.max(costPlusFloor, discountedMarket);
+          } else if (currentPricingStrategy === 'balanced') {
+            if (totalMarketValue > costPlusFloor) {
+              targetAmount = costPlusFloor + ((totalMarketValue - costPlusFloor) * 0.55);
+            } else {
+              targetAmount = costPlusFloor;
+            }
+          } else if (currentPricingStrategy === 'max_profit') {
+            const nearMarketCeiling = totalMarketValue * 0.97;
+            targetAmount = Math.max(costPlusFloor, nearMarketCeiling);
+          }
+        }
+
+        if (feeTiming === 'before') {
+          const preRound = targetAmount + feeAmount;
+          clientFinalQuote = Math.round(preRound / 11) * 11;
+          const factor = Math.round(clientFinalQuote / 11);
+          formulaNote = `(${currentPricingStrategy.toUpperCase()} target $${Math.round(targetAmount).toLocaleString()} + $${feeAmount} fee rounded to 11×${factor} = $${clientFinalQuote.toLocaleString()})`;
+        } else {
+          const roundedBase = Math.round(targetAmount / 11) * 11;
+          clientFinalQuote = roundedBase + feeAmount;
+          const factor = Math.round(roundedBase / 11);
+          formulaNote = `(${currentPricingStrategy.toUpperCase()} base $${roundedBase.toLocaleString()} [11×${factor}] + $${feeAmount} fee = $${clientFinalQuote.toLocaleString()})`;
+        }
+      }
+
+      // Net Profit & Margins
+      const netProfit = clientFinalQuote > 0 ? (clientFinalQuote - totalSubCost) : 0;
+      const marginPct = clientFinalQuote > 0 ? (netProfit / clientFinalQuote) * 100 : 0;
+      const clientSavings = (totalMarketValue > clientFinalQuote && clientFinalQuote > 0) ? (totalMarketValue - clientFinalQuote) : 0;
+      const clientSavingsPct = (totalMarketValue > 0 && clientSavings > 0) ? ((clientSavings / totalMarketValue) * 100) : 0;
+
+      // Strategy badge text
+      const strategyLabels = {
+        'cost_plus': 'Cost-Plus Floor',
+        'max_value': 'Max Client Value (~12% Off)',
+        'balanced': 'Sweet Spot (Balanced)',
+        'max_profit': 'Max Profit (Market Limit)'
+      };
+      const stratBadgeEl = document.getElementById('strategyBadge');
+      if (stratBadgeEl) stratBadgeEl.textContent = strategyLabels[currentPricingStrategy] || 'Balanced';
+
+      const clientTradeService = clientFinalQuote > 0 ? (includeFee && feeTiming === 'after' ? clientFinalQuote - feeAmount : clientFinalQuote) : 0;
+
+      // Update Displays
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
+
+      setTxt('vendorTotalCostBasisDisplay', fmt(totalSubCost));
+      setTxt('clientProposalTotal', fmt(clientFinalQuote));
+      setTxt('factor11FormulaPreview', formulaNote);
+      setTxt('clientNetProfitDisplay', fmt(netProfit));
+      setTxt('clientMarginPctDisplay', `${marginPct.toFixed(1)}% Realized Spread`);
+      setTxt('marketBenchmarkDisplay', fmt(totalMarketValue));
+      setTxt('clientBasisDisplay', fmt(totalSubCost));
+      setTxt('clientSavingsDisplay', clientSavings > 0 ? `${fmt(clientSavings)} Savings` : '$0.00 Defensible');
+      setTxt('clientSavingsPctDisplay', clientSavingsPct > 0 ? `${clientSavingsPct.toFixed(1)}% Below Retail` : 'Audit-Defensible');
+      setTxt('targetMarkupDisplay', `${targetMarkupPct.toFixed(1)}%`);
+
+      const tradeNames = {
+        'plumbing': 'Plumbing',
+        'electrical': 'Electrical',
+        'hvac': 'HVAC',
+        'roofing_construction': 'Roofing / Construction',
+        'tree': 'Tree Services',
+        'turnover': 'Turnover',
+        'cleaning': 'Cleaning Services',
+        'drywall': 'Drywall / Painting',
+        'flooring': 'Flooring',
+        'general': 'General',
+        'appliance': 'Used Appliance & Repair'
+      };
+      setTxt('tradeBadgeDisplay', `${tradeNames[selectedTrade] || 'Contractor'} | ${strategyLabels[currentPricingStrategy] || 'Custom'}`);
+      setTxt('tableTradeLabel', `${tradeNames[selectedTrade] || 'Trade Execution'}${selectedTaskCount > 0 ? ` (${selectedTaskCount} Tasks)` : ''}`);
+
+      // Matrix Row Values
+      setTxt('row_labor_sub', fmt(totalSubCost));
+      setTxt('row_labor_market', fmt(totalMarketValue));
+      setTxt('row_labor_client', fmt(clientTradeService));
+
+      setTxt('row_fee_client', fmt(includeFee ? feeAmount : 0));
+
+      setTxt('row_total_sub', fmt(totalSubCost));
+      setTxt('row_total_market', fmt(totalMarketValue));
+      setTxt('row_total_client', fmt(clientFinalQuote));
+    }
+
+    // Input event listeners
+    document.querySelectorAll('input, textarea').forEach(el => {
+      el.addEventListener('input', recalculate);
+      el.addEventListener('change', recalculate);
+    });
+
+    const btnUpdateLocation = document.getElementById('btn_update_location');
+    if (btnUpdateLocation) {
+      btnUpdateLocation.addEventListener('click', () => {
+        const zip = zipInput ? zipInput.value.trim() : '46203';
+        const city = cityInput ? cityInput.value.trim() : 'Indianapolis';
+        const state = stateInput ? stateInput.value.trim().toUpperCase() : 'IN';
+        const tax = taxRateInput ? taxRateInput.value : '7.0';
+        updateLocationBadge(zip);
+        recalculate();
+        const match = zipCountyMap[zip];
+        const countyName = match ? `${match.city} (${match.county})` : `${city}, ${state} ${zip}`;
+        showToast(`Updated Location: ${countyName} & ${tax}% Tax applied!`);
+      });
+    }
+
+    [propAddressInput, cityInput, stateInput, zipInput, taskNumberInput].forEach(inp => {
+      if (inp) {
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (btnUpdateLocation) btnUpdateLocation.click();
+          }
+        });
+      }
+    });
+
+    // Copy Proposal for Owner Button
+    const btnCopyQuoteOwner = document.getElementById('btn_copy_quote_owner');
+    if (btnCopyQuoteOwner) {
+      btnCopyQuoteOwner.addEventListener('click', () => {
+        const clientProposalEl = document.getElementById('clientProposalTotal');
+        const clientTotal = clientProposalEl ? clientProposalEl.textContent : '$0.00';
+        const zip = zipInput && zipInput.value.trim() ? zipInput.value.trim() : '46203';
+        const city = cityInput && cityInput.value.trim() ? cityInput.value.trim() : 'Indianapolis';
+        const state = stateInput && stateInput.value.trim() ? stateInput.value.trim().toUpperCase() : 'IN';
+        const address = propAddressInput ? propAddressInput.value.trim() : '';
+        const taskNum = taskNumberInput ? taskNumberInput.value.trim() : '';
+        const rawScope = scopeDescInput ? scopeDescInput.value.trim() : '';
+
+        const tradeTitles = {
+          'plumbing': 'Plumbing Repair & Replacement',
+          'electrical': 'Electrical Service & Repair',
+          'hvac': 'HVAC System Service & Repair',
+          'roofing_construction': 'Roofing / Construction Repair & Replacement',
+          'tree': 'Tree Trimming, Removal & Grounds Clearing',
+          'turnover': 'Turnover Rehabilitation & Rent-Ready Prep',
+          'cleaning': 'Professional Turnover & Touch-Up Cleaning Services',
+          'drywall': 'Drywall / Painting Repairs',
+          'flooring': 'Flooring Replacement & Repair',
+          'general': 'General Property Repairs & Maintenance',
+          'appliance': 'Appliance Diagnostic, Repair & Used Unit Replacement'
+        };
+
+        const tradeHeader = tradeTitles[selectedTrade] || 'Maintenance & Repair';
+
+        const scopeBullets = [];
+        
+        // 1. Add specific quantified task line items
+        const taskKeys = Object.keys(activeTaskSelections);
+        if (taskKeys.length > 0) {
+          taskKeys.forEach(k => {
+            const t = activeTaskSelections[k];
+            scopeBullets.push(`• ${t.name} (Qty: ${t.qty} ${t.unit})`);
+          });
+        }
+
+        // 2. Add custom problem / technician notes if entered
+        if (rawScope) {
+          scopeBullets.push(`• Additional Scope: ${rawScope}`);
+        } else if (taskKeys.length === 0) {
+          scopeBullets.push(`• Professional ${tradeHeader.toLowerCase()} per property management work order specifications.`);
+        }
+
+        scopeBullets.push('• All required trade materials, specialized fittings, and hardware supplies.');
+        scopeBullets.push('• Complete site cleanup, debris removal, and thorough testing to confirm proper operation.');
+
+        let cleanLocation = `${city}, ${state} ${zip}`;
+        if (address) {
+          cleanLocation = `${address}, ${city}, ${state} ${zip}`;
+        }
+
+        const formattedEstimateHeader = taskNum ? `Estimate #: ${taskNum}\n` : '';
+        const ownerQuoteText =
+`MAINTENANCE & REPAIR ESTIMATE
+${formattedEstimateHeader}Property Location: ${cleanLocation}
+Classification: ${tradeHeader}
+
+SCOPE OF WORK & SPECIFICATIONS:
+${scopeBullets.join('\n')}
+
+TOTAL (Materials, Labor & Coordination): ${clientTotal}
+All applicable labor, materials, and project management oversight included.
+
+Please reply to this estimate to approve this work order and schedule execution.`;
+
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = ownerQuoteText;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        showToast('Client Proposal copied to clipboard!');
+      });
+    }
+
+    // Copy Summary / Audit Button
+    const copySummaryBtn = document.getElementById('copySummaryBtn');
+    if (copySummaryBtn) {
+      copySummaryBtn.addEventListener('click', () => {
+        const getElTxt = id => {
+          const el = document.getElementById(id);
+          return el ? el.textContent : '$0.00';
+        };
+
+        const subTotal = getElTxt('row_total_sub');
+        const marketTotal = getElTxt('row_total_market');
+        const clientTotal = getElTxt('clientProposalTotal');
+        const netProfit = getElTxt('clientNetProfitDisplay');
+        const marginPct = getElTxt('clientMarginPctDisplay');
+        const taskNum = taskNumberInput ? taskNumberInput.value.trim() : '';
+        const taskHeader = taskNum ? `Task / Estimate #: ${taskNum}\n` : '';
+        const vendorName = vendorNameInput ? vendorNameInput.value.trim() : 'External Vendor';
+        const vendorInvoice = vendorInvoiceNumInput ? vendorInvoiceNumInput.value.trim() : 'N/A';
+
+        const taskKeys = Object.keys(activeTaskSelections);
+        let taskAuditList = '';
+        if (taskKeys.length > 0) {
+          taskAuditList = '• Quantified Tasks:\n' + taskKeys.map(k => `   - ${activeTaskSelections[k].name} (Qty: ${activeTaskSelections[k].qty})`).join('\n') + '\n';
+        }
+
+        const summaryText = `External Maintenance Vendor Markup Audit:\n` +
+                            taskHeader +
+                            `• Trade: ${selectedTrade.toUpperCase()}\n` +
+                            `• Subcontractor: ${vendorName} (Ref: ${vendorInvoice})\n` +
+                            taskAuditList +
+                            `• Vendor Net Cost Basis: ${subTotal}\n` +
+                            `• Regional Retail Benchmark: ${marketTotal}\n` +
+                            `-----------------------------------------\n` +
+                            `• Client Proposed Total: ${clientTotal}\n` +
+                            `• PM Net Profit Spread: ${netProfit} (${marginPct})\n` +
+                            `Generated via PM Maintenance Estimator.`;
+
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = summaryText;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        showToast('Audit summary copied to clipboard!');
+      });
+    }
+
+    // --- INITIALIZATION ---
+    function initializeApp() {
+      populateVendorDropdown();
+      // Default to blank vendor selection
+      if (vendorSelectDropdown) vendorSelectDropdown.value = '';
+      applyVendorSelection('');
+
+      if (zipInput && zipInput.value) updateLocationBadge(zipInput.value);
+      highlightSelectedTradeButton();
+      renderHierarchicalTaskScope();
+      recalculate();
+    }
+
+    window.addEventListener('DOMContentLoaded', initializeApp);
+    if (document.readyState === 'interactive' || document.readyState === 'complete') {
+      initializeApp();
+    }
+  </script>
+</body>
+</html>
